@@ -3,7 +3,11 @@
 void myDisplay()
 {
 	// clear the screen 
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glColor3f(1, 0, 0);
+	GLUquadric* sun = gluNewQuadric();
+	gluSphere(sun, 0.10006, 100, 100);
 
 	// Swap the double buffers
 	glutSwapBuffers();
@@ -30,13 +34,19 @@ void initializeGL() {
 
 	// Load the identity matrix
 	glLoadIdentity();
+	
+	// set window mode to 2D orthographic 
+	//glOrtho(-2.0, 2.0, -2.0, 2.0, -10, 10.0);
 
-	// Set window mode to 2D orthographic and set the window size 
-	//gluOrtho2D(LEFT_WALL_LIMIT, RIGHT_WALL_LIMIT, BOTTOM_WALL_LIMIT, TOP_WALL_LIMIT);
+	gluPerspective(45, (float)WIDTH / (float)HEIGHT, 0.1, 1000.0);
+
+	// change into model-view mode so that we can change the object positions
+	glMatrixMode(GL_MODELVIEW);
 }
 
 void update() {
-
+	glutPostRedisplay();
+	glutTimerFunc(FRAME_EXIST_TIME, update, 0);
 }
 
 void main(int argc, char** argv)
@@ -66,7 +76,7 @@ void main(int argc, char** argv)
 	glutInit(&argc, argv);
 
 	// Set inital display properties
-	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
+	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
 	glutInitWindowSize(WIDTH, HEIGHT);
 	glutInitWindowPosition(100, 150);
 
