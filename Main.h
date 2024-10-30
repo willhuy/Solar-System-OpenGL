@@ -19,11 +19,13 @@
 #define BASE_THETA_CHANGE 0.1f
 
 // Initial camera position
-GLfloat cameraPosition[] = { 0, 1, 2 };
+GLfloat cameraPosition[] = { 0, 1, 3 };
 
 float theta = 0.0f;
 
-void renderSolarSytem();
+void renderPlanet(GLUquadric*, float, float, float, float, float, float);
+
+void renderSolarSystem();
 
 void myDisplay();
 
