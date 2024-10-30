@@ -1,13 +1,36 @@
 #include "Main.h"
 
+void renderSolarSytem() {
+
+	/* Render from innermost to outermost */
+	glLoadIdentity();
+
+	// set the camera position t look at origin, and sit straight up
+	gluLookAt(cameraPosition[0], cameraPosition[1], cameraPosition[2],
+		0, 0, 0,
+		0, 1, 0);
+
+	// Sun
+	glPushMatrix();
+	glColor3f(1, 1, 0);
+	gluSphere(sun, SUN_RADIUS, Z_SUBDIVISION, Z_SUBDIVISION);
+	glPopMatrix();
+
+	// Planet 1
+	glPushMatrix();
+	glRotatef(theta * PLANET_1_SPEED, 0, 1, 0);
+	glTranslatef(0.5, 0, 0);
+	glColor3f(0, 1, 0);
+	gluSphere(planet1, PLANET_1_RADIUS, Z_SUBDIVISION, Z_SUBDIVISION);
+	glPopMatrix();
+}
+
 void myDisplay()
 {
 	// clear the screen 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glColor3f(1, 0, 0);
-	GLUquadric* sun = gluNewQuadric();
-	gluSphere(sun, 0.10006, 100, 100);
+	renderSolarSytem();
 
 	// Swap the double buffers
 	glutSwapBuffers();
@@ -21,8 +44,10 @@ void myMouseButton(int button, int state, int x, int y) {
 
 }
 
-
 void initializeGL() {
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LEQUAL);
+
 	// Background set to block
 	glClearColor(0, 0, 0, 1);
 
@@ -34,17 +59,16 @@ void initializeGL() {
 
 	// Load the identity matrix
 	glLoadIdentity();
-	
-	// set window mode to 2D orthographic 
-	//glOrtho(-2.0, 2.0, -2.0, 2.0, -10, 10.0);
 
-	gluPerspective(45, (float)WIDTH / (float)HEIGHT, 0.1, 1000.0);
+	// Set camera projection to be perspective
+	gluPerspective(100.0, (float)WIDTH / (float)HEIGHT, Z_NEAR, Z_FAR);
 
 	// change into model-view mode so that we can change the object positions
 	glMatrixMode(GL_MODELVIEW);
 }
 
 void update() {
+	theta += BASE_THETA_CHANGE;
 	glutPostRedisplay();
 	glutTimerFunc(FRAME_EXIST_TIME, update, 0);
 }
@@ -74,6 +98,9 @@ void main(int argc, char** argv)
 
 	// initialize the toolkit
 	glutInit(&argc, argv);
+
+	// Init the solar system
+	initializeSolarSystemManager();
 
 	// Set inital display properties
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);

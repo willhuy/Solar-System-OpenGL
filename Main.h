@@ -1,17 +1,29 @@
 #pragma once
 
 #include <freeglut.h>
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 
-//#include "SolarSystemManager.h"
+#include "SolarSystemManager.h"
 
 // GLUT related macros
 #define FRAME_EXIST_TIME 1000 / 60
 #define WIDTH 900
 #define HEIGHT 600
+#define Z_NEAR 0.1f 
+#define Z_FAR 100.0f
+
+// Solar system render related macros
+#define Z_SUBDIVISION 100
+#define BASE_THETA_CHANGE 0.1f
+
+// Initial camera position
+GLfloat cameraPosition[] = { 0, 1, 2 };
+
+float theta = 0.0f;
+
+void renderSolarSytem();
 
 void myDisplay();
 
