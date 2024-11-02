@@ -9,6 +9,25 @@ void renderPlanet(GLUquadric* planet, float speed, float offsetX, float radius, 
 	glPopMatrix();
 }
 
+void renderPlanetWithMoon(GLUquadric* planet,GLUquadric* moon, 
+						  float planetSpeed, float moonSpeed,
+						  float planetOffsetX, float planetRadius, float moonOffsetX, float moonRadius, 
+	                      float red, float green, float blue) {
+	glPushMatrix();
+		// Planet
+		glRotatef(theta * planetSpeed, 0, 1, 0);
+		glTranslatef(planetOffsetX, 0, 0);
+		glColor3f(red, green, blue);
+		gluSphere(planet, planetRadius, Z_SUBDIVISION, Z_SUBDIVISION);
+
+		// Moon
+		glRotatef(theta * moonSpeed / 2, 0, 1, 0);
+		glTranslatef(planetOffsetX - moonOffsetX, 0, 0);
+		glColor3f(1.0f - red, 1.0f - green, 1.0f - blue);
+		gluSphere(moon, moonRadius, Z_SUBDIVISION, Z_SUBDIVISION);
+	glPopMatrix();
+}
+
 void renderSolarSystem() {
 
 	/* Render from innermost to outermost */
@@ -26,10 +45,11 @@ void renderSolarSystem() {
 	// Planets
 	renderPlanet(planet1, PLANET_1_SPEED, PLANET_1_OFFSET_X, PLANET_1_RADIUS, 0, 1, 0); // Green Planet
 	renderPlanet(planet2, PLANET_2_SPEED, PLANET_2_OFFSET_X, PLANET_2_RADIUS, 1, 0, 0); // Red Planet
-	renderPlanet(planet3, PLANET_3_SPEED, PLANET_3_OFFSET_X, PLANET_3_RADIUS, 1, 0.5, 0); // Orange Planet
-	renderPlanet(planet4, PLANET_4_SPEED, PLANET_4_OFFSET_X, PLANET_4_RADIUS, 1, 0, 0); // Red Planet
-	renderPlanet(planet5, PLANET_5_SPEED, PLANET_5_OFFSET_X, PLANET_5_RADIUS, 1, 0, 0); // Red Planet
-	renderPlanet(planet6, PLANET_6_SPEED, PLANET_6_OFFSET_X, PLANET_6_RADIUS, 1, 0, 0); // Red Planet
+	renderPlanet(planet4, PLANET_4_SPEED, PLANET_4_OFFSET_X, PLANET_4_RADIUS, 0, 0, 1); // Red Planet
+	renderPlanet(planet5, PLANET_5_SPEED, PLANET_5_OFFSET_X, PLANET_5_RADIUS, 0.2, 0.6, 0.4); // Red Planet
+	renderPlanet(planet6, PLANET_6_SPEED, PLANET_6_OFFSET_X, PLANET_6_RADIUS, 0.2, 0.8, 0.2); // Red Planet
+
+	renderPlanetWithMoon(planet3, moon1, PLANET_3_SPEED, MOON_1_SPEED, PLANET_3_OFFSET_X, PLANET_3_RADIUS, MOON_1_OFFSET_X, MOON_1_RADIUS, 1, 0.5, 0); // Orange Planet
 }
 
 void myDisplay()
@@ -68,7 +88,7 @@ void initializeGL() {
 	glLoadIdentity();
 
 	// Set camera projection to be perspective
-	gluPerspective(100.0, (float)WIDTH / (float)HEIGHT, Z_NEAR, Z_FAR);
+	gluPerspective(90.0, (float)WIDTH / (float)HEIGHT, Z_NEAR, Z_FAR);
 
 	// change into model-view mode so that we can change the object positions
 	glMatrixMode(GL_MODELVIEW);
