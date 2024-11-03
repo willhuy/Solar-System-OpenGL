@@ -15,3 +15,12 @@ void initializeSolarSystemManager() {
 	moon3   = gluNewQuadric();
 	moon4   = gluNewQuadric();
 }
+
+void initStars() {
+	for (int starIndex = 0; starIndex < NUMBER_OF_STAR; starIndex++) {
+		// Position of stars on x, y, z axis
+		starPosition[starIndex][0] = (rand() % 1000 - 500) / 10.0f;  // X position
+		starPosition[starIndex][1] = (rand() % 1000 - 500) / 10.0f;  // Y position
+		starPosition[starIndex][2] = (rand() % 1000 - 500) / 10.0f;  // Z position
+	}
+}

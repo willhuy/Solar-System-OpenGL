@@ -12,11 +12,11 @@
 #define FRAME_EXIST_TIME 1000 / 60
 #define WIDTH 900
 #define HEIGHT 600
+#define Z_SUBDIVISION 100
 #define Z_NEAR 0.1f 
 #define Z_FAR 10000.0f
 
 // Solar system render related macros
-#define Z_SUBDIVISION 100
 #define BASE_THETA_CHANGE 0.1f
 #define CAMERA_INCREMENT 0.1f
 #define ORBIT_SEGMENTS 1000  // Number of segments for smooth circle
@@ -32,7 +32,9 @@ GLdouble cameraCenterZ = 0;
 
 float theta = 0.0f;
 
-int orbitOn = 1;
+int orbitOn = 0;
+
+int starOn = 0;
 
 void drawOrbit(float);
 
@@ -48,9 +50,9 @@ void renderPlanetWithMoon(GLUquadric*, GLUquadric*, float, float, float, float, 
 
 void renderSolarSystem();
 
-void myDisplay();
+void renderStars();
 
-void myMouseButton(int, int, int, int);
+void myDisplay();
 
 void myKey(unsigned char, int, int);
 

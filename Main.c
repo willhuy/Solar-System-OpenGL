@@ -101,6 +101,25 @@ void renderSolarSystem() {
 	if (orbitOn) {
 		drawOrbitHelper();
 	}
+
+	if (starOn) {
+		renderStars();
+	}
+}
+
+void renderStars() {
+	glPointSize(1.5f);
+	glBegin(GL_POINTS);
+	for (int starIndex = 0; starIndex < NUMBER_OF_STAR; starIndex++) {
+		glColor3f(starColor[starIndex][0], starColor[starIndex][1], starColor[starIndex][2]);
+		glVertex3f(starPosition[starIndex][0], starPosition[starIndex][1], starPosition[starIndex][2]);
+
+		// Randomly change color slightly for twinkling
+		starColor[starIndex][0] = rand() / (float)RAND_MAX;
+		starColor[starIndex][1] = rand() / (float)RAND_MAX;
+		starColor[starIndex][2] = rand() / (float)RAND_MAX;
+	}
+	glEnd();
 }
 
 void myDisplay()
@@ -124,6 +143,10 @@ void myKey(unsigned char key, int x, int y) {
 	// User press 'q' to quit
 	if (key == 'r') {
 		orbitOn = 1 - orbitOn;
+	}
+
+	if (key == 's') {
+		starOn = 1 - starOn;
 	}
 }
 
@@ -163,10 +186,6 @@ void mySpecialKey(unsigned char key, int x, int y) {
 		cameraPosition[2] += CAMERA_INCREMENT;
 		cameraCenterZ += CAMERA_INCREMENT;
 	}
-}
-
-void myMouseButton(int button, int state, int x, int y) {
-
 }
 
 void initializeGL() {
@@ -229,6 +248,9 @@ void main(int argc, char** argv)
 	// Init the solar system
 	initializeSolarSystemManager();
 
+	// Init star
+	initStars();
+
 	// Set inital display properties
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
 	glutInitWindowSize(WIDTH, HEIGHT);
@@ -248,9 +270,6 @@ void main(int argc, char** argv)
 
 	// register special keyboard input function
 	glutSpecialFunc(mySpecialKey);
-
-	// register mouse input function
-	glutMouseFunc(myMouseButton);
 
 	// Initialize OpenGL settings
 	initializeGL();

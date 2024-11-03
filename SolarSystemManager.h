@@ -48,6 +48,8 @@
 #define MOON_4_SPEED     5
 #define MOON_4_OFFSET_X  2.1f
 
+#define NUMBER_OF_STAR 10000
+
 GLUquadric* sun;
 GLUquadric* planet1;
 GLUquadric* planet2;
@@ -60,4 +62,9 @@ GLUquadric* moon2;
 GLUquadric* moon3;
 GLUquadric* moon4;
 
+float starPosition[NUMBER_OF_STAR][3];
+float starColor[NUMBER_OF_STAR][3];
+
 void initializeSolarSystemManager();
+
+void initStars();
