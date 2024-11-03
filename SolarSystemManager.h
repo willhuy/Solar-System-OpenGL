@@ -6,7 +6,6 @@
 
 /* Planets */
 
-
 #define PLANET_1_RADIUS    0.03f
 #define PLANET_1_SPEED     10
 #define PLANET_1_OFFSET_X  0.6f
@@ -37,17 +36,17 @@
 #define MOON_1_SPEED     3
 #define MOON_1_OFFSET_X  1.3f
 
-#define MOON_2_RADIUS    0.07f
-#define MOON_2_SPEED     10
-#define MOON_2_OFFSET_X  2.9f
+#define MOON_2_RADIUS    0.02f
+#define MOON_2_SPEED     5
+#define MOON_2_OFFSET_X  2.7f
 
-#define MOON_3_RADIUS    0.07f
-#define MOON_3_SPEED     10
-#define MOON_3_OFFSET_X  2.9f
+#define MOON_3_RADIUS    0.01f
+#define MOON_3_SPEED     1
+#define MOON_3_OFFSET_X  0.4f
 
-#define MOON_4_RADIUS    0.07f
-#define MOON_4_SPEED     10
-#define MOON_4_OFFSET_X  2.9f
+#define MOON_4_RADIUS    0.03f
+#define MOON_4_SPEED     5
+#define MOON_4_OFFSET_X  2.1f
 
 GLUquadric* sun;
 GLUquadric* planet1;

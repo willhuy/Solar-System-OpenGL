@@ -1,5 +1,18 @@
 #include "Main.h"
 
+// Function to draw an orbit
+void drawOrbit(float radius) {
+	glColor3f(1.0f, 1.0f, 1.0f);
+	glBegin(GL_LINE_LOOP);
+	for (int i = 0; i < ORBIT_SEGMENTS; i++) {
+		float theta = 2.0f * PI * i / ORBIT_SEGMENTS;
+		float x = radius * cosf(theta);
+		float z = radius * sinf(theta);
+		glVertex3f(x, 0.0f, z);
+	}
+	glEnd();
+}
+
 void renderPlanet(GLUquadric* planet, float speed, float offsetX, float radius, float red, float green, float blue) {
 	glPushMatrix();
 		glRotatef(theta * speed, 0, 1, 0);
@@ -17,6 +30,7 @@ void renderPlanetWithMoon(GLUquadric* planet,GLUquadric* moon,
 		// Planet
 		glRotatef(theta * planetSpeed, 0, 1, 0);
 		glTranslatef(planetOffsetX, 0, 0);
+		drawOrbit(planetOffsetX - moonOffsetX);
 		glColor3f(red, green, blue);
 		gluSphere(planet, planetRadius, Z_SUBDIVISION, Z_SUBDIVISION);
 
@@ -38,18 +52,28 @@ void renderSolarSystem() {
 
 	// Sun
 	glPushMatrix();
-	glColor3f(1, 1, 0);  // Yellow
-	gluSphere(sun, SUN_RADIUS, Z_SUBDIVISION, Z_SUBDIVISION);
+		glColor3f(1, 1, 0);  // Yellow
+		gluSphere(sun, SUN_RADIUS, Z_SUBDIVISION, Z_SUBDIVISION);
 	glPopMatrix();
 
 	// Planets
-	renderPlanet(planet1, PLANET_1_SPEED, PLANET_1_OFFSET_X, PLANET_1_RADIUS, 0, 1, 0); // Green Planet
+	renderPlanetWithMoon(planet1, moon3, PLANET_1_SPEED, MOON_3_SPEED, PLANET_1_OFFSET_X, PLANET_1_RADIUS, MOON_3_OFFSET_X, MOON_3_RADIUS, 0, 1, 0); // Orange Planet
+	//renderPlanet(planet1, PLANET_1_SPEED, PLANET_1_OFFSET_X, PLANET_1_RADIUS, 0, 1, 0); // Green Planet
 	renderPlanet(planet2, PLANET_2_SPEED, PLANET_2_OFFSET_X, PLANET_2_RADIUS, 1, 0, 0); // Red Planet
-	renderPlanet(planet4, PLANET_4_SPEED, PLANET_4_OFFSET_X, PLANET_4_RADIUS, 0, 0, 1); // Red Planet
-	renderPlanet(planet5, PLANET_5_SPEED, PLANET_5_OFFSET_X, PLANET_5_RADIUS, 0.2, 0.6, 0.4); // Red Planet
-	renderPlanet(planet6, PLANET_6_SPEED, PLANET_6_OFFSET_X, PLANET_6_RADIUS, 0.2, 0.8, 0.2); // Red Planet
-
 	renderPlanetWithMoon(planet3, moon1, PLANET_3_SPEED, MOON_1_SPEED, PLANET_3_OFFSET_X, PLANET_3_RADIUS, MOON_1_OFFSET_X, MOON_1_RADIUS, 1, 0.5, 0); // Orange Planet
+	renderPlanet(planet4, PLANET_4_SPEED, PLANET_4_OFFSET_X, PLANET_4_RADIUS, 0, 0, 1); // Red Planet
+	//renderPlanet(planet5, PLANET_5_SPEED, PLANET_5_OFFSET_X, PLANET_5_RADIUS, 0.2, 0.6, 0.4); // Red Planet
+	renderPlanetWithMoon(planet5, moon4, PLANET_5_SPEED, MOON_4_SPEED, PLANET_5_OFFSET_X, PLANET_5_RADIUS, MOON_4_OFFSET_X, MOON_4_RADIUS, 0.5, 0.3, 0.4); // Orange Planet
+	//renderPlanet(planet6, PLANET_6_SPEED, PLANET_6_OFFSET_X, PLANET_6_RADIUS, 0.2, 0.8, 0.2); // Red Planet
+	renderPlanetWithMoon(planet6, moon2, PLANET_6_SPEED, MOON_2_SPEED, PLANET_6_OFFSET_X, PLANET_6_RADIUS, MOON_2_OFFSET_X, MOON_2_RADIUS, 0.2, 0.4, 0.7);
+
+	// Orbit
+	drawOrbit(PLANET_1_OFFSET_X);
+	drawOrbit(PLANET_2_OFFSET_X);
+	drawOrbit(PLANET_3_OFFSET_X);
+	drawOrbit(PLANET_4_OFFSET_X);
+	drawOrbit(PLANET_5_OFFSET_X);
+	drawOrbit(PLANET_6_OFFSET_X);
 }
 
 void myDisplay()
@@ -88,7 +112,7 @@ void initializeGL() {
 	glLoadIdentity();
 
 	// Set camera projection to be perspective
-	gluPerspective(90.0, (float)WIDTH / (float)HEIGHT, Z_NEAR, Z_FAR);
+	gluPerspective(45.0, (float)WIDTH / (float)HEIGHT, Z_NEAR, Z_FAR);
 
 	// change into model-view mode so that we can change the object positions
 	glMatrixMode(GL_MODELVIEW);
