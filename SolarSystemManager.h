@@ -18,8 +18,8 @@
 #define PLANET_3_SPEED     25
 #define PLANET_3_OFFSET_X  1.5f
 
-#define PLANET_4_RADIUS    0.03f
-#define PLANET_4_SPEED     3
+#define PLANET_4_RADIUS    0.08f
+#define PLANET_4_SPEED     0.5
 #define PLANET_4_OFFSET_X  1.9f
 
 #define PLANET_5_RADIUS    0.07f

@@ -1,6 +1,5 @@
 #include "Main.h"
 
-// Function to draw an orbit
 void drawOrbit(float radius) {
 	glColor3f(1.0f, 1.0f, 1.0f);
 	glBegin(GL_LINE_LOOP);
@@ -11,6 +10,36 @@ void drawOrbit(float radius) {
 		glVertex3f(x, 0.0f, z);
 	}
 	glEnd();
+}
+
+void drawOrbitHelper() {
+	drawOrbit(PLANET_1_OFFSET_X);
+	drawOrbit(PLANET_2_OFFSET_X);
+	drawOrbit(PLANET_3_OFFSET_X);
+	drawEllipticalOrbit(PLANET_4_OFFSET_X, 0.5f);
+	drawOrbit(PLANET_5_OFFSET_X);
+	drawOrbit(PLANET_6_OFFSET_X);
+}
+
+void drawEllipticalOrbit(float radiusX, float radiusZ) {
+	glBegin(GL_LINE_LOOP);
+	for (int i = 0; i < ORBIT_SEGMENTS; i++) {
+		float theta = 2.0f * PI * i / ORBIT_SEGMENTS;
+		float x = radiusX * cosf(theta);
+		float z = radiusZ * sinf(theta); 
+		glVertex3f(x, 0.0f, z);
+	}
+	glEnd();
+}
+
+void renderPlanetEllipse(GLUquadric* planet, float radiusX, float radiusZ, float planetRadius, float planetSpeed, float red, float green, float blue) {
+	float x = radiusX * cosf(theta * planetSpeed);
+	float z = radiusZ * sinf(theta * planetSpeed);
+	glPushMatrix();
+		glTranslatef(x, 0.0f, z);
+		glColor3f(red, green, blue);
+		gluSphere(planet, planetRadius, Z_SUBDIVISION, Z_SUBDIVISION);
+	glPopMatrix();
 }
 
 void renderPlanet(GLUquadric* planet, float speed, float offsetX, float radius, float red, float green, float blue) {
@@ -30,7 +59,11 @@ void renderPlanetWithMoon(GLUquadric* planet,GLUquadric* moon,
 		// Planet
 		glRotatef(theta * planetSpeed, 0, 1, 0);
 		glTranslatef(planetOffsetX, 0, 0);
-		drawOrbit(planetOffsetX - moonOffsetX);
+
+		if (orbitOn) {
+			drawOrbit(planetOffsetX - moonOffsetX);
+		}
+
 		glColor3f(red, green, blue);
 		gluSphere(planet, planetRadius, Z_SUBDIVISION, Z_SUBDIVISION);
 
@@ -48,7 +81,7 @@ void renderSolarSystem() {
 	glLoadIdentity();
 
 	// Set the camera position to look at the origin, with the Y-axis as up
-	gluLookAt(cameraPosition[0], cameraPosition[1], cameraPosition[2], 0, 0, 0, 0, 1, 0);
+	gluLookAt(cameraPosition[0], cameraPosition[1], cameraPosition[2], cameraCenterX, cameraCenterY, cameraCenterZ, 0, 1, 0);
 
 	// Sun
 	glPushMatrix();
@@ -57,23 +90,17 @@ void renderSolarSystem() {
 	glPopMatrix();
 
 	// Planets
-	renderPlanetWithMoon(planet1, moon3, PLANET_1_SPEED, MOON_3_SPEED, PLANET_1_OFFSET_X, PLANET_1_RADIUS, MOON_3_OFFSET_X, MOON_3_RADIUS, 0, 1, 0); // Orange Planet
-	//renderPlanet(planet1, PLANET_1_SPEED, PLANET_1_OFFSET_X, PLANET_1_RADIUS, 0, 1, 0); // Green Planet
-	renderPlanet(planet2, PLANET_2_SPEED, PLANET_2_OFFSET_X, PLANET_2_RADIUS, 1, 0, 0); // Red Planet
-	renderPlanetWithMoon(planet3, moon1, PLANET_3_SPEED, MOON_1_SPEED, PLANET_3_OFFSET_X, PLANET_3_RADIUS, MOON_1_OFFSET_X, MOON_1_RADIUS, 1, 0.5, 0); // Orange Planet
-	renderPlanet(planet4, PLANET_4_SPEED, PLANET_4_OFFSET_X, PLANET_4_RADIUS, 0, 0, 1); // Red Planet
-	//renderPlanet(planet5, PLANET_5_SPEED, PLANET_5_OFFSET_X, PLANET_5_RADIUS, 0.2, 0.6, 0.4); // Red Planet
-	renderPlanetWithMoon(planet5, moon4, PLANET_5_SPEED, MOON_4_SPEED, PLANET_5_OFFSET_X, PLANET_5_RADIUS, MOON_4_OFFSET_X, MOON_4_RADIUS, 0.5, 0.3, 0.4); // Orange Planet
-	//renderPlanet(planet6, PLANET_6_SPEED, PLANET_6_OFFSET_X, PLANET_6_RADIUS, 0.2, 0.8, 0.2); // Red Planet
+	renderPlanetWithMoon(planet1, moon3, PLANET_1_SPEED, MOON_3_SPEED, PLANET_1_OFFSET_X, PLANET_1_RADIUS, MOON_3_OFFSET_X, MOON_3_RADIUS, 0, 1, 0);
+	renderPlanet(planet2, PLANET_2_SPEED, PLANET_2_OFFSET_X, PLANET_2_RADIUS, 1, 0, 0);
+	renderPlanetWithMoon(planet3, moon1, PLANET_3_SPEED, MOON_1_SPEED, PLANET_3_OFFSET_X, PLANET_3_RADIUS, MOON_1_OFFSET_X, MOON_1_RADIUS, 1, 0.5, 0);
+	renderPlanetEllipse(planet4, PLANET_4_OFFSET_X, 0.5f, PLANET_4_RADIUS, PLANET_4_SPEED, 0, 0, 1);
+	renderPlanetWithMoon(planet5, moon4, PLANET_5_SPEED, MOON_4_SPEED, PLANET_5_OFFSET_X, PLANET_5_RADIUS, MOON_4_OFFSET_X, MOON_4_RADIUS, 0.5, 0.3, 0.4);
 	renderPlanetWithMoon(planet6, moon2, PLANET_6_SPEED, MOON_2_SPEED, PLANET_6_OFFSET_X, PLANET_6_RADIUS, MOON_2_OFFSET_X, MOON_2_RADIUS, 0.2, 0.4, 0.7);
 
 	// Orbit
-	drawOrbit(PLANET_1_OFFSET_X);
-	drawOrbit(PLANET_2_OFFSET_X);
-	drawOrbit(PLANET_3_OFFSET_X);
-	drawOrbit(PLANET_4_OFFSET_X);
-	drawOrbit(PLANET_5_OFFSET_X);
-	drawOrbit(PLANET_6_OFFSET_X);
+	if (orbitOn) {
+		drawOrbitHelper();
+	}
 }
 
 void myDisplay()
@@ -88,7 +115,54 @@ void myDisplay()
 }
 
 void myKey(unsigned char key, int x, int y) {
+	// User press 'q' to quit
+	if (key == 'q') {
+		printf("User press 'q'!\n");
+		exit(0);
+	}
 
+	// User press 'q' to quit
+	if (key == 'r') {
+		orbitOn = 1 - orbitOn;
+	}
+}
+
+void mySpecialKey(unsigned char key, int x, int y) {
+	// Move camera up
+	if (key == GLUT_KEY_UP) {
+		cameraPosition[1] += CAMERA_INCREMENT;
+		cameraCenterY += CAMERA_INCREMENT;
+	}
+
+	// Move camera down
+	if (key == GLUT_KEY_DOWN) {
+		cameraPosition[1] -= CAMERA_INCREMENT;
+		cameraCenterY -= CAMERA_INCREMENT;
+	}
+
+	// Move camera left
+	if (key == GLUT_KEY_LEFT) {
+		cameraPosition[0] -= CAMERA_INCREMENT;
+		cameraCenterX -= CAMERA_INCREMENT;
+	}
+
+	// Move camera right
+	if (key == GLUT_KEY_RIGHT) {
+		cameraPosition[0] += CAMERA_INCREMENT;
+		cameraCenterX += CAMERA_INCREMENT;
+	}
+
+	// Move camera foward
+	if (key == GLUT_KEY_PAGE_UP) {
+		cameraPosition[2] -= CAMERA_INCREMENT;
+		cameraCenterZ -= CAMERA_INCREMENT;
+	}
+
+	// Move camera backward
+	if (key == GLUT_KEY_PAGE_DOWN) {
+		cameraPosition[2] += CAMERA_INCREMENT;
+		cameraCenterZ += CAMERA_INCREMENT;
+	}
 }
 
 void myMouseButton(int button, int state, int x, int y) {
@@ -96,6 +170,8 @@ void myMouseButton(int button, int state, int x, int y) {
 }
 
 void initializeGL() {
+
+	// Enable Depth testing
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
 
@@ -167,8 +243,11 @@ void main(int argc, char** argv)
 	// register timer callback function
 	glutTimerFunc(FRAME_EXIST_TIME, update, 0);
 
-	// register keyboard input function
+	// register normal keyboard input function
 	glutKeyboardFunc(myKey);
+
+	// register special keyboard input function
+	glutSpecialFunc(mySpecialKey);
 
 	// register mouse input function
 	glutMouseFunc(myMouseButton);

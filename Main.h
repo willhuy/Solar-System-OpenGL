@@ -18,16 +18,29 @@
 // Solar system render related macros
 #define Z_SUBDIVISION 100
 #define BASE_THETA_CHANGE 0.1f
+#define CAMERA_INCREMENT 0.1f
 #define ORBIT_SEGMENTS 1000  // Number of segments for smooth circle
 #define PI 3.14159265358979323846
 
 // Initial camera position
-//GLfloat cameraPosition[] = { 0, 5, 0.1 }; // Top down
+//GLfloat cameraPosition[] = { 0, 8, 0.1 }; // Top down
 GLfloat cameraPosition[] = { 0, 0.5, 5 };
+
+GLdouble cameraCenterX = 0;
+GLdouble cameraCenterY = 0;
+GLdouble cameraCenterZ = 0;
 
 float theta = 0.0f;
 
+int orbitOn = 1;
+
 void drawOrbit(float);
+
+void drawOrbitHelper();
+
+void drawEllipticalOrbit(float, float);
+
+void renderPlanetEllipse(GLUquadric*, float, float, float, float, float, float, float);
 
 void renderPlanet(GLUquadric*, float, float, float, float, float, float);
 
