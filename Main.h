@@ -21,7 +21,6 @@
 #define BASE_THETA_CHANGE 0.1f
 #define CAMERA_INCREMENT 0.1f
 #define ORBIT_SEGMENTS 1000  // Number of segments for smooth circle
-#define PI 3.14159265358979323846
 
 // Initial camera position
 //GLfloat cameraPosition[] = { 0, 8, 0.1 }; // Top down
@@ -36,6 +35,8 @@ float theta = 0.0f;
 int orbitOn = 0;
 
 int starOn = 0;
+
+int coronaOn = 0;
 
 void drawOrbit(float);
 
@@ -54,6 +55,8 @@ void renderSolarSystem();
 void renderStars();
 
 void renderShip();
+
+void renderCorona();
 
 void myDisplay();
 

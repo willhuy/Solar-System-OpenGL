@@ -24,3 +24,14 @@ void initStars() {
 		starPosition[starIndex][2] = (rand() % 1000 - 500) / 10.0f;  // Z position
 	}
 }
+
+// Generate random rays for the corona
+void generateCorona() {
+	for (int i = 0; i < NUMBER_OF_CORONA; i++) {
+		float angle = (rand() % 360) * (PI / 180.0f);  // Random angle in radians
+		coronas[i][0] = cos(angle) * SUN_RADIUS; // Corona x coor
+		coronas[i][1] = sin(angle) * SUN_RADIUS; // Corona y coor
+		coronas[i][2] = 0.2f + (rand() % 50) / 50.0f;  // Random length
+		coronas[i][3] = 0.5f + (rand() % 50) / 100.0f;  // Random transparency
+	}
+}

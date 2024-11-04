@@ -10,6 +10,7 @@ void loadShip(const char* fileName) {
     }
 
     shipAvailable = 1;
+    specialMode = 0;
     vertexCount = 0;
     facesCount = 0;
 

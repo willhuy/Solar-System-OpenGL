@@ -10,6 +10,7 @@ float vertices[MAX_VERTICES][3];
 int faces[MAX_FACES][3];
 
 int shipAvailable;
+int specialMode;
 int vertexCount;
 int facesCount;
 

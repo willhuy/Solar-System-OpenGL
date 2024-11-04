@@ -1,6 +1,9 @@
 #pragma once
 
 #include <freeglut.h>
+#include <math.h>
+
+#define PI 3.14159265358979323846
 
 #define SUN_RADIUS         0.2f
 
@@ -49,6 +52,7 @@
 #define MOON_4_OFFSET_X  2.1f
 
 #define NUMBER_OF_STAR 10000
+#define NUMBER_OF_CORONA 500
 
 GLUquadric* sun;
 GLUquadric* planet1;
@@ -64,7 +68,10 @@ GLUquadric* moon4;
 
 float starPosition[NUMBER_OF_STAR][3];
 float starColor[NUMBER_OF_STAR][3];
+float coronas[100][4];
 
 void initializeSolarSystemManager();
 
 void initStars();
+
+void generateCorona();

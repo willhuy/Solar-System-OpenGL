@@ -125,8 +125,16 @@ void renderShip() {
 	glTranslatef(cameraPosition[0], cameraPosition[1] - 1.0f, cameraPosition[2] - 3.0f);
 	
 	for (int i = 0; i < facesCount; i++) {
-		float color = (float)(i + 1) / 1989; // Adjust color using suggested method 
-		glColor3f(color, color, color); 
+		if (specialMode) {
+			float r = (float)rand() / RAND_MAX;
+			float g = (float)rand() / RAND_MAX;
+			float b = (float)rand() / RAND_MAX;
+			glColor3f(r, g, b);
+		}
+		else {
+			float color = (float)(i + 1) / 1989; // Adjust color using suggested method 
+			glColor3f(color, color, color);
+		}
 
 		glBegin(GL_TRIANGLES);
 			glVertex3f(vertices[faces[i][0] - 1][0], vertices[faces[i][0] - 1][1], vertices[faces[i][0] - 1][2]);
@@ -135,6 +143,26 @@ void renderShip() {
 		glEnd();
 	}
 	glPopMatrix();
+}
+
+void renderCorona() {
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glLineWidth(2.0f);
+
+	for (int i = 0; i < NUMBER_OF_CORONA; i++) {
+		glBegin(GL_LINES);
+		// Set color for the base (near the sun)
+		glColor4f(1.0f, 0.8f, 0.0f, coronas[i][3]);  // Bright orange, semi-transparent
+		glVertex2f(coronas[i][0], coronas[i][1]);
+
+		// Set color for the tip (farther out)
+		glColor4f(1.0f, 0.8f, 0.0f, 0.0f);  // Fully transparent at the tip
+		glVertex2f(coronas[i][0] * (1 + coronas[i][2]), coronas[i][1] * (1 + coronas[i][2]));
+		glEnd();
+	}
+
+	glDisable(GL_BLEND);
 }
 
 void myDisplay()
@@ -148,6 +176,12 @@ void myDisplay()
 	// Render star if enable
 	if (starOn) {
 		renderStars();
+	}
+
+	// Render sun's corona if enable
+	if (coronaOn) {
+		generateCorona();
+		renderCorona();
 	}
 
 	// Render ship if available
@@ -166,13 +200,24 @@ void myKey(unsigned char key, int x, int y) {
 		exit(0);
 	}
 
-	// User press 'q' to quit
+	// Toggle orbit visualization
 	if (key == 'r') {
 		orbitOn = 1 - orbitOn;
 	}
 
+	// Toggle stars
 	if (key == 's') {
 		starOn = 1 - starOn;
+	}
+
+	// Toggle stars
+	if (key == 'c') {
+		coronaOn = 1 - coronaOn;
+	}
+
+	// Made ship has random color
+	if (key == 'k') {
+		specialMode = 1 - specialMode;
 	}
 }
 
@@ -281,7 +326,7 @@ void main(int argc, char** argv)
 	loadShip("enterprise.txt");
 
 	// Set inital display properties
-	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
+	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
 	glutInitWindowSize(WIDTH, HEIGHT);
 	glutInitWindowPosition(100, 150);
 
