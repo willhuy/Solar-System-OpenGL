@@ -7,6 +7,7 @@
 #include <math.h>
 
 #include "SolarSystemManager.h"
+#include "ShipManager.h"
 
 // GLUT related macros
 #define FRAME_EXIST_TIME 1000 / 60
@@ -51,6 +52,8 @@ void renderPlanetWithMoon(GLUquadric*, GLUquadric*, float, float, float, float, 
 void renderSolarSystem();
 
 void renderStars();
+
+void renderShip();
 
 void myDisplay();
 

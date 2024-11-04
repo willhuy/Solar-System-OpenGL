@@ -21,12 +21,18 @@
     <ClCompile Include="SolarSytemManager.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ShipManager.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="SolarSystemManager.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ShipManager.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

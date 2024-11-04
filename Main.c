@@ -101,10 +101,6 @@ void renderSolarSystem() {
 	if (orbitOn) {
 		drawOrbitHelper();
 	}
-
-	if (starOn) {
-		renderStars();
-	}
 }
 
 void renderStars() {
@@ -122,12 +118,42 @@ void renderStars() {
 	glEnd();
 }
 
+void renderShip() {
+	glPushMatrix();
+
+	// This will make the ship move with camera
+	glTranslatef(cameraPosition[0], cameraPosition[1] - 1.0f, cameraPosition[2] - 3.0f);
+	
+	for (int i = 0; i < facesCount; i++) {
+		float color = (float)(i + 1) / 1989; // Adjust color using suggested method 
+		glColor3f(color, color, color); 
+
+		glBegin(GL_TRIANGLES);
+			glVertex3f(vertices[faces[i][0] - 1][0], vertices[faces[i][0] - 1][1], vertices[faces[i][0] - 1][2]);
+			glVertex3f(vertices[faces[i][1] - 1][0], vertices[faces[i][1] - 1][1], vertices[faces[i][1] - 1][2]);
+			glVertex3f(vertices[faces[i][2] - 1][0], vertices[faces[i][2] - 1][1], vertices[faces[i][2] - 1][2]);
+		glEnd();
+	}
+	glPopMatrix();
+}
+
 void myDisplay()
 {
 	// clear the screen 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	// Render the solar system and orbit if enable
 	renderSolarSystem();
+
+	// Render star if enable
+	if (starOn) {
+		renderStars();
+	}
+
+	// Render ship if available
+	if (shipAvailable) {
+		renderShip();
+	}
 
 	// Swap the double buffers
 	glutSwapBuffers();
@@ -250,6 +276,9 @@ void main(int argc, char** argv)
 
 	// Init star
 	initStars();
+
+	// Load the ship if exist
+	loadShip("enterprise.txt");
 
 	// Set inital display properties
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
